@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"uppies/cli/commands"
 )
 
 func main() {
@@ -12,15 +13,9 @@ func main() {
 		Short: "Uppies CLI tool",
 	}
 
-	var plzCmd = &cobra.Command{
-		Use:   "plz",
-		Short: "Execute the plz command",
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("plz command executed")
-		},
-	}
+	commands.LoadConfig()
 
-	rootCmd.AddCommand(plzCmd)
+	rootCmd.AddCommand(commands.PlzCommand())
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
