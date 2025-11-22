@@ -10,14 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_22_013723) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_22_075737) do
   create_table "sites", force: :cascade do |t|
     t.string "name", null: false
     t.string "storage_path", null: false
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "owner_type", null: false
+    t.integer "owner_id", null: false
+    t.integer "creator_id", null: false
+    t.index ["creator_id"], name: "index_sites_on_creator_id"
     t.index ["name"], name: "index_sites_on_name", unique: true
+    t.index ["owner_type", "owner_id"], name: "index_sites_on_owner"
   end
 
   create_table "users", force: :cascade do |t|
@@ -28,4 +33,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_22_013723) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
     t.index ["token"], name: "index_users_on_token", unique: true
   end
+
+  add_foreign_key "sites", "users", column: "creator_id"
 end

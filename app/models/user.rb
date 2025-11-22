@@ -18,6 +18,8 @@ require 'securerandom'
 class User < ApplicationRecord
   before_create :generate_token
 
+  has_many :sites, foreign_key: :creator_id
+
 private
 
   def generate_token

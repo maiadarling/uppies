@@ -45,6 +45,8 @@ class SitesController < ApplicationController
     site = Site.new
     site.name = name
     site.storage_path = site_folder.to_s
+    site.creator = current_user
+    site.owner = current_user
     site.save!
 
     DeploySiteJob.perform_later(site_id: site.id)

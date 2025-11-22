@@ -11,7 +11,7 @@ class DeploySiteJob < ApplicationJob
   def perform(site_id:)
     site = Site.find(site_id)
 
-    site.deploying!
+    site.update!(status: :deploying)
 
     # Execute Rails.root/bin/deploy-site with FULL_PATH and NAME as args
     command = "#{Rails.root}/bin/deploy-site #{site.storage_path} #{site.name}"
@@ -23,13 +23,15 @@ class DeploySiteJob < ApplicationJob
     # Parse the JSON output
     deploy_data = JSON.parse(output)
 
+    site.update!(container_id: deploy_data["container_id"])
+
     puts "Deployment output: #{deploy_data.inspect}"
 
     prime_website(site.url)
 
     # Update site with deployment info
     site.update!(
-      status: :live
+      status: :live,
     )
   rescue => e
     site.update!(status: :error)
