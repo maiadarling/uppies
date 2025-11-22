@@ -11,7 +11,7 @@ def analyze_folder; end
 def prepare_folder
   puts "Preparing folder #{TARGET_FOLDER} for upload..."
   zip_path = "/tmp/site_upload.zip"
-  system("zip -r #{zip_path} #{TARGET_FOLDER}")
+  system("zip -r #{zip_path} #{TARGET_FOLDER} > /dev/null 2>&1")
 
   puts "Folder prepared and zipped at #{zip_path}."
 
@@ -30,7 +30,7 @@ def upload_folder(archive_path, site_name = nil)
 
   json = JSON.parse(response.body)
 
-  return json
+  return json['data']
 end
 
 def cleanup
